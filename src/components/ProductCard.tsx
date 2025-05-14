@@ -1,4 +1,6 @@
-import { useState } from 'react'; // Import useState
+import { useState } from 'react';
+
+
 
 export interface Category {
   id: number;
@@ -26,19 +28,15 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product }: ProductCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false); // State for toggling description
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const imageUrl = product.images && product.images.length > 0 && product.images[0]
-    ? product.images[0]
-    : 'https://placehold.co/600x400';
+  const imageUrl = product.images && product.images.length > 0 && product.images[0] ? product.images[0] : 'https://placehold.co/600x400';
 
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const descriptionToShow = product.description.length > 30 && !isExpanded
-    ? `${product.description.substring(0, 30)}...`
-    : product.description;
+  const descriptionToShow = product.description.length > 30 && !isExpanded ? `${product.description.substring(0, 30)}...` : product.description;
 
   return (
     <div className="card">
@@ -57,5 +55,7 @@ function ProductCard({ product }: ProductCardProps) {
     </div>
   );
 }
+
+
 
 export default ProductCard;
