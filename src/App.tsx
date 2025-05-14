@@ -1,13 +1,53 @@
-import { useState } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
+import ProductCard from './components/ProductCard';
+import type { Product } from './components/ProductCard';
+import axios from 'axios';
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState<Product[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await axios.get<Product[]>('https://api.escuelajs.co/api/v1/products');
+        setData(response.data);
+      } catch (e) {
+          console.error("Error", e);   
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className="app-container"><h1>Loading products...</h1></div>;
+  }
+
+  if (error) {
+    return <div className="app-container"><h1>Error: {error}</h1></div>;
+  }
 
   return (
-    <>
-    </>
-  )
+    <div className="app-container">
+      <h1>Product List</h1>
+      <div className="card-container">
+        {data.map(product => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
